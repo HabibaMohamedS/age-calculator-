@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Age calculator app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+    @font-face {
+      font-family: out;
+      src: url(./assets/fonts/Poppins-BoldItalic.ttf);
+    }
+    @font-face {
+      font-family: in;
+      src: url(./assets/fonts/Poppins-Regular.ttf);
+    }
+    body{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: hsl(0, 0%, 94%);
+    }
+    #output{
+      font-family: out;
+    }
+    #input{
+      font-family: in;
+      display: flex;
+      flex-direction: row;
+      margin-left: 20px;
+      margin-bottom: 20px;
+      
+    }
+    #clc{
+      background-color: hsl(259,100%,65%);
+      border: none;
+      border-radius: 50%;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      align-items: center;
+      position:absolute;
+      right: 30px;
+      top: 130px;
+      display: flex;
+      cursor: pointer;
+    }
+    #clc:hover{
+      background-color: black;
+    }
+    #dayError,#monthError,#yearError
+    {
+      color: red;
+      font-size: x-small;
+      font-weight: bold;
+    }
+    #day,#month,#year
+    {
+      width: 70%;padding: 10px;border-radius: 5px;border: 2px solid hsl(0, 0%, 94%);
+      
+      outline: none;
+    }
+    #day:focus,#month:focus,#year:focus{
+      border: 2px solid hsl(259,100%,65%);
+    }
+    #container{
+      background-color: hsl(0, 0%, 100%);
+      width: 420px;
+      max-width: 80%;
+      padding: 30px;
+      position: relative;
+      border-bottom-right-radius: 120px;
+      border-bottom-left-radius: 15px;
+      border-top-right-radius: 15px;
+      border-top-left-radius: 15px;
+    }
+    #Y,#M,#D{
+      color: hsl(259,100%,65%);
+    }
+    
+   
+    
+  </style>
+  <script>
+    function ageCalc(){
+      console.log("hi");
+      if(document.getElementById("dayError").innerText==""&& document.getElementById("monthError").innerText==""
+      &&document.getElementById("yearError").innerText=="")
+      {
+        console.log(1);
+        var day=document.getElementById("day").value;
+        var m = document.getElementById("month").value;
+        var y = document.getElementById("year").value;
+        var date = new Date();
+        var d2 = date.getDate();
+        var m2 = 1 + date.getMonth();
+        var y2 = date.getFullYear();
+        var month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if(day > d2){
+          d2 = d2 + month[m2 - 1];
+          m2 = m2 - 1;
+        }
+        if(m > m2){
+          m2 = m2 + 12;
+          y2 = y2 - 1;
+        }
+        var finald=d2-day;
+        var finalm=m2-m;
+        var finaly=y2-y;
+        document.getElementById("D").innerText=finald;
+        document.getElementById("M").innerText=finalm;
+        document.getElementById("Y").innerText=finaly;
+      }
+      else{
+        console.log(2);
+        alert("please make sure the date is correct !");
+        document.getElementById("D").innerText="--";
+        document.getElementById("M").innerText="--";
+        document.getElementById("Y").innerText="--";
+      }
+    }
+    function checkDay(){
+      var day=document.getElementById("day").value;
+      console.log(day);
+      var m = document.getElementById("month").value;
+      var year = document.getElementById("year").value;
+      if (day >31)
+        document.getElementById("dayError").innerText="must be a vaild day";
+      else if((m==4||m==6||m==9||m==11)&& day>30)
+        document.getElementById("dayError").innerText="must be a vaild day";
+      else if (m==2){
+        if(((0 == year % 4) && (0 != year % 100) || (0 == year % 400))&&day>29)
+          document.getElementById("dayError").innerText="must be a vaild date";
+        else if(!((0 == year % 4) && (0 != year % 100) || (0 == year % 400))&&day>28)
+          document.getElementById("dayError").innerText="must be a vaild date";
+        else document.getElementById("dayError").innerText="";
+      }
+
+      else document.getElementById("dayError").innerText="";
+    }
+    function checkMonth(){
+      var m = document.getElementById("month").value; 
+      if(m>12 || m<1)
+        document.getElementById("monthError").innerText="must be a vaild month";
+      else
+        document.getElementById("monthError").innerText="";
+    }
+    function checkYear(){
+      const d = new Date();
+      let year = d.getFullYear();
+      var y = document.getElementById("year").value;
+      console.log(y);
+      if(y>year)
+        document.getElementById("yearError").innerText="must be in the past";
+      else
+        document.getElementById("yearError").innerText="";
+    }
+    
+  </script>
+</head>
+<body>
+  <div id="container">
+  <div id="input">
+  <div id="left">
+    DAY
+    
+    <input type="number" placeholder="DD" id="day" onkeyup=checkDay()> 
+    <span id="dayError"></span>
+  </div>
+  <div id="center">
+    MONTH
+    
+    <input type="number" placeholder="MM" id="month" onkeyup=checkMonth();checkDay() >
+    <span id="monthError"></span>
+  </div>
+  <div id="right">
+    YEAR
+    
+    <input type="number" placeholder="YYYY" id="year" onkeyup=checkYear();checkDay()>
+    <span id="yearError" ></span>
+  </div>
+</div>
+<br id="br">
+<br>
+  
+    <button id="clc" onclick="ageCalc()">
+      <img src="./assets/images/icon-arrow.svg" alt="btn" id="img">
+    </button>
+ 
+<div id="output">
+  <h1>
+  <div>
+   <span id="Y"> -- </span>years
+  </div>
+  <div>
+   <span id="M"> --</span> months
+  </div>
+  <div>
+    <span id="D"> --</span> days
+  </div>
+</h1>
+</div>
+<br>
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Habiba</a>.
+  </div>
+</div>
+</body>
+</html>
